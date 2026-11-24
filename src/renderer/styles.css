@@ -1,0 +1,138 @@
+@import '@fontsource/plus-jakarta-sans/400.css';
+@import '@fontsource/plus-jakarta-sans/500.css';
+@import '@fontsource/plus-jakarta-sans/600.css';
+@import '@fontsource/plus-jakarta-sans/700.css';
+@import '@fontsource/plus-jakarta-sans/800.css';
+@import 'tailwindcss';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --color-bg: #f1f1ec;
+  --color-ink: #1c2321;
+  --color-muted: #8a918e;
+  --color-line: #e7e7e1;
+  --color-teal: #0b6b63;
+  --color-teal-dark: #08534d;
+  --color-teal-soft: #e2efed;
+  --color-yellow: #ffc93c;
+  --color-yellow-dark: #f2b705;
+  --color-yellow-soft: #fff4d4;
+  --color-surface: #ffffff;
+  --color-on-yellow: #1c2321;
+  --radius-card: 18px;
+  --shadow-soft: 0 6px 24px -8px rgb(16 24 20 / 0.1), 0 1px 2px rgb(16 24 20 / 0.04);
+  --shadow-lift: 0 14px 34px -12px rgb(16 24 20 / 0.22);
+
+  --animate-pop: pop 260ms cubic-bezier(0.2, 0.9, 0.3, 1.3);
+  --animate-slide-in: slide-in 240ms ease-out both;
+  --animate-fade-in: fade-in 180ms ease-out both;
+  --animate-flash: flash 700ms ease-out both;
+  --animate-toast: toast-in 260ms cubic-bezier(0.2, 0.9, 0.3, 1.2) both;
+
+  @keyframes pop {
+    0% { transform: scale(0.92); }
+    60% { transform: scale(1.04); }
+    100% { transform: scale(1); }
+  }
+  @keyframes slide-in {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes flash {
+    0% { opacity: 0; transform: scale(0.6); }
+    25% { opacity: 1; transform: scale(1.05); }
+    70% { opacity: 1; transform: scale(1); }
+    100% { opacity: 0; transform: scale(1); }
+  }
+  @keyframes toast-in {
+    from { opacity: 0; transform: translateY(12px) scale(0.96); }
+    to { opacity: 1; transform: none; }
+  }
+}
+
+@layer base {
+  html, body, #root { height: 100%; }
+  body {
+    @apply bg-bg text-ink font-sans antialiased select-none overflow-hidden;
+    font-size: clamp(14px, 0.55vw + 7px, 17px);
+  }
+  input, textarea, select { @apply select-text; }
+  button { @apply cursor-pointer; touch-action: manipulation; }
+  :focus-visible { outline: 3px solid color-mix(in srgb, var(--color-teal) 45%, transparent); outline-offset: 2px; }
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-thumb { background: var(--scroll-thumb, #d6d6cf); border-radius: 8px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+}
+
+@utility card { @apply bg-surface rounded-[var(--radius-card)] shadow-[var(--shadow-soft)]; }
+@utility btn {
+    @apply inline-flex items-center justify-center gap-2 min-h-11 px-4 rounded-xl font-semibold transition
+      active:scale-[0.97] disabled:opacity-45 disabled:pointer-events-none whitespace-nowrap;
+  }
+
+@layer components {
+  .btn-yellow { @apply btn bg-yellow text-on-yellow hover:bg-yellow-dark; }
+  .btn-teal { @apply btn bg-teal text-white hover:bg-teal-dark; }
+  .btn-ghost { @apply btn bg-bg text-ink hover:bg-line; }
+  .btn-danger { @apply btn bg-rose-50 text-rose-600 hover:bg-rose-100 dark:bg-rose-500/15 dark:text-rose-300 dark:hover:bg-rose-500/25; }
+  .btn-icon { @apply btn px-0 w-11 bg-bg hover:bg-line; }
+  .chip { @apply inline-flex items-center gap-1.5 min-h-11 px-4 rounded-full font-semibold transition active:scale-[0.97]; }
+  .field {
+    @apply w-full min-h-11 px-4 rounded-xl bg-bg border border-transparent outline-none transition
+      focus:border-teal/40 focus:bg-surface placeholder:text-muted;
+  }
+  .label { @apply block text-sm font-semibold text-muted mb-1.5; }
+  .drag { -webkit-app-region: drag; }
+  .no-drag { -webkit-app-region: no-drag; }
+  /* torn receipt edge: scallops cut into the bottom of the white paper */
+  .torn-edge {
+    height: 14px;
+    background: radial-gradient(circle at 10px 14px, var(--color-bg) 7px, var(--color-surface) 7.5px) repeat-x;
+    background-size: 20px 14px;
+  }
+  .dashed-sep { border-top: 2px dashed var(--color-line); }
+}
+
+/* Dark theme: same tokens, darker values. Utilities read the variables, so most UI follows automatically. */
+.dark {
+  color-scheme: dark;
+  --color-bg: #121615;
+  --color-surface: #1b2120;
+  --color-ink: #e8ecea;
+  --color-muted: #8d9794;
+  --color-line: #2b3331;
+  --color-teal: #12877d;
+  --color-teal-dark: #0e6e66;
+  --color-teal-soft: #163a36;
+  --color-yellow-soft: #3b3220;
+  --shadow-soft: 0 6px 24px -8px rgb(0 0 0 / 0.5), 0 1px 2px rgb(0 0 0 / 0.3);
+  --scroll-thumb: #3a4341;
+}
+
+/* Low-power mode for weak PCs: no motion, no blur, flat shadows. */
+.low-power *,
+.low-power *::before,
+.low-power *::after {
+  animation: none !important;
+  transition: none !important;
+  backdrop-filter: none !important;
+}
+.low-power {
+  --shadow-soft: 0 1px 2px rgb(0 0 0 / 0.12);
+  --shadow-lift: 0 1px 3px rgb(0 0 0 / 0.18);
+}
+
+/* Receipts and barcodes stay paper-white in every theme. */
+.paper {
+  --color-surface: #ffffff;
+  --color-ink: #1c2321;
+  --color-muted: #8a918e;
+  --color-line: #e7e7e1;
+  color: var(--color-ink);
+}
